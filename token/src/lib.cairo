@@ -15,6 +15,7 @@ mod components {
             mod erc20_burnable;
             mod erc20_metadata;
             mod erc20_mintable;
+            mod erc20_wrapper;
         }
 
         mod erc721 {}
