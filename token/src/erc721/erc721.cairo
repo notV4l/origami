@@ -281,7 +281,7 @@ mod ERC721 {
             ref self: ContractState, event: S
         ) {
             self.emit(event);
-            emit!(self.world(), event);
+            emit!(self.world(), (event));
         }
     }
 

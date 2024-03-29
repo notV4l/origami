@@ -268,7 +268,7 @@ mod ERC1155 {
             ref self: ContractState, event: S
         ) {
             self.emit(event.clone());
-            emit!(self.world(), event);
+            emit!(self.world(), (event));
         }
     }
 

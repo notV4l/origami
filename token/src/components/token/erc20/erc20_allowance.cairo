@@ -114,7 +114,9 @@ mod erc20_allowance_component {
             let approval_event = Approval {
                 owner: allowance.owner, spender: allowance.spender, value: allowance.amount
             };
-            self.emit_event(approval_event);
+
+            self.emit(approval_event.clone());
+            emit!(self.get_contract().world(), (Event::Approval(approval_event)));
         }
 
         // use in transfer_from
@@ -128,12 +130,6 @@ mod erc20_allowance_component {
             allowance.amount = allowance.amount - amount;
             self.set_allowance(allowance);
         }
-
-        fn emit_event<S, +traits::Into<S, Event>, +Drop<S>, +Clone<S>>(
-            ref self: ComponentState<TContractState>, event: S
-        ) {
-            self.emit(event.clone());
-            emit!(self.get_contract().world(), event);
-        }
+       
     }
 }
