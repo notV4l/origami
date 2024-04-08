@@ -1,27 +1,27 @@
-// mod components {
-//     mod introspection {
-//         mod src5;
-//     }
+mod components {
+    mod introspection {
+        mod src5;
+    }
 
-//     mod security {
-//         mod initializable;
-//     }
+    mod security {
+        mod initializable;
+    }
 
-//     mod token {
-//         mod erc20 {
-//             mod erc20_allowance;
-//             mod erc20_balance;
-//             mod erc20_bridgeable;
-//             mod erc20_burnable;
-//             mod erc20_metadata;
-//             mod erc20_mintable;
-//         }
+    mod token {
+        mod erc20 {
+            mod erc20_allowance;
+            mod erc20_balance;
+            mod erc20_bridgeable;
+            mod erc20_burnable;
+            mod erc20_metadata;
+            mod erc20_mintable;
+        }
 
-//         mod erc721 {}
-//     }
+        mod erc721 {}
+    }
 
-//     mod tests;
-// }
+    // mod tests;
+}
 
 mod erc20 {
     mod interface;

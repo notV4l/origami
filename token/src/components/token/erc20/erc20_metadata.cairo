@@ -108,7 +108,7 @@ mod erc20_metadata_component {
         }
 
         fn initialize(
-            ref self: ComponentState<TContractState>, name: felt252, symbol: felt252, decimals: u8
+            self: @ComponentState<TContractState>, name: felt252, symbol: felt252, decimals: u8
         ) {
             set!(
                 self.get_contract().world(),
@@ -120,7 +120,7 @@ mod erc20_metadata_component {
 
         // Helper function to update total_supply model
         fn update_total_supply(
-            ref self: ComponentState<TContractState>, subtract: u256, add: u256
+            self: @ComponentState<TContractState>, subtract: u256, add: u256
         ) {
             let mut meta = self.get_metadata();
             // adding and subtracting is fewer steps than if

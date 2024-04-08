@@ -22,7 +22,7 @@ struct ERC20AllowanceModel {
 #[starknet::interface]
 trait IERC20Allowance<TState> {
     fn allowance(self: @TState, owner: ContractAddress, spender: ContractAddress) -> u256;
-    fn approve(ref self: TState, spender: ContractAddress, amount: u256) -> bool;
+    fn approve(self: @TState, spender: ContractAddress, amount: u256) -> bool;
 }
 
 ///
@@ -73,7 +73,7 @@ mod erc20_allowance_component {
             self.get_allowance(owner, spender).amount
         }
         fn approve(
-            ref self: ComponentState<TContractState>, spender: ContractAddress, amount: u256
+            self: @ComponentState<TContractState>, spender: ContractAddress, amount: u256
         ) -> bool {
             let owner = get_caller_address();
             self
@@ -106,7 +106,7 @@ mod erc20_allowance_component {
             )
         }
 
-        fn set_allowance(ref self: ComponentState<TContractState>, allowance: ERC20AllowanceModel) {
+        fn set_allowance(self: @ComponentState<TContractState>, allowance: ERC20AllowanceModel) {
             assert(!allowance.owner.is_zero(), Errors::APPROVE_FROM_ZERO);
             assert(!allowance.spender.is_zero(), Errors::APPROVE_TO_ZERO);
             set!(self.get_contract().world(), (allowance));
@@ -115,13 +115,13 @@ mod erc20_allowance_component {
                 owner: allowance.owner, spender: allowance.spender, value: allowance.amount
             };
 
-            self.emit(approval_event.clone());
+            // self.emit(approval_event.clone());
             emit!(self.get_contract().world(), (Event::Approval(approval_event)));
         }
 
         // use in transfer_from
         fn spend_allowance(
-            ref self: ComponentState<TContractState>,
+            self: @ComponentState<TContractState>,
             owner: ContractAddress,
             spender: ContractAddress,
             amount: u256

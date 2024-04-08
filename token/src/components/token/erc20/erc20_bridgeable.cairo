@@ -18,8 +18,8 @@ struct ERC20BridgeableModel {
 #[starknet::interface]
 trait IERC20Bridgeable<TState> {
     fn l2_bridge_address(self: @TState) -> ContractAddress;
-    fn mint(ref self: TState, recipient: ContractAddress, amount: u256);
-    fn burn(ref self: TState, account: ContractAddress, amount: u256);
+    fn mint(self: @TState, recipient: ContractAddress, amount: u256);
+    fn burn(self: @TState, account: ContractAddress, amount: u256);
 }
 
 ///
@@ -70,18 +70,18 @@ mod erc20_bridgeable_component {
         }
 
         fn mint(
-            ref self: ComponentState<TContractState>, recipient: ContractAddress, amount: u256
+            self: @ComponentState<TContractState>, recipient: ContractAddress, amount: u256
         ) {
             self.assert_is_bridge(get_caller_address());
 
-            let mut erc20_mintable = get_dep_component_mut!(ref self, ERC20Mintable);
+            let  erc20_mintable = get_dep_component!(self, ERC20Mintable);
             erc20_mintable.mint(recipient, amount);
         }
 
-        fn burn(ref self: ComponentState<TContractState>, account: ContractAddress, amount: u256) {
+        fn burn(self: @ComponentState<TContractState>, account: ContractAddress, amount: u256) {
             self.assert_is_bridge(get_caller_address());
 
-            let mut erc20_burnable = get_dep_component_mut!(ref self, ERC20Burnable);
+            let erc20_burnable = get_dep_component!(self, ERC20Burnable);
             erc20_burnable.burn(account, amount);
         }
     }
@@ -98,7 +98,7 @@ mod erc20_bridgeable_component {
         +Drop<TContractState>,
     > of InternalTrait<TContractState> {
         fn initialize(
-            ref self: ComponentState<TContractState>, l2_bridge_address: ContractAddress
+            self: @ComponentState<TContractState>, l2_bridge_address: ContractAddress
         ) {
             set!(
                 self.get_contract().world(),

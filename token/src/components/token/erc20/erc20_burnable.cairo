@@ -32,11 +32,11 @@ mod erc20_burnable_component {
         impl ERC20Metadata: erc20_metadata_comp::HasComponent<TContractState>,
         +Drop<TContractState>,
     > of InternalTrait<TContractState> {
-        fn burn(ref self: ComponentState<TContractState>, account: ContractAddress, amount: u256) {
+        fn burn(self: @ComponentState<TContractState>, account: ContractAddress, amount: u256) {
             assert(!account.is_zero(), Errors::BURN_FROM_ZERO);
 
-            let mut erc20_balance = get_dep_component_mut!(ref self, ERC20Balance);
-            let mut erc20_metadata = get_dep_component_mut!(ref self, ERC20Metadata);
+            let erc20_balance = get_dep_component!(self, ERC20Balance);
+            let erc20_metadata = get_dep_component!(self, ERC20Metadata);
 
             erc20_metadata.update_total_supply(amount, 0);
             erc20_balance.update_balance(account, amount, 0);
@@ -45,7 +45,7 @@ mod erc20_burnable_component {
                 from: account, to: Zeroable::zero(), value: amount
             };
 
-            erc20_balance.emit(transfer_event.clone());
+            // erc20_balance.emit(transfer_event.clone());
             emit!(
                 self.get_contract().world(), (erc20_balance_comp::Event::Transfer(transfer_event))
             );

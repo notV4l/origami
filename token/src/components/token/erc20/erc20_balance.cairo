@@ -20,9 +20,9 @@ struct ERC20BalanceModel {
 #[starknet::interface]
 trait IERC20Balance<TState> {
     fn balance_of(self: @TState, account: ContractAddress) -> u256;
-    fn transfer(ref self: TState, recipient: ContractAddress, amount: u256) -> bool;
+    fn transfer(self: @TState, recipient: ContractAddress, amount: u256) -> bool;
     fn transfer_from(
-        ref self: TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
+        self: @TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
     ) -> bool;
 }
 
@@ -30,7 +30,7 @@ trait IERC20Balance<TState> {
 trait IERC20BalanceCamel<TState> {
     fn balanceOf(self: @TState, account: ContractAddress) -> u256;
     fn transferFrom(
-        ref self: TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
+        self: @TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
     ) -> bool;
 }
 
@@ -86,7 +86,7 @@ mod erc20_balance_component {
         }
 
         fn transfer(
-            ref self: ComponentState<TContractState>, recipient: ContractAddress, amount: u256
+            self: @ComponentState<TContractState>, recipient: ContractAddress, amount: u256
         ) -> bool {
             let sender = get_caller_address();
             self.transfer_internal(sender, recipient, amount);
@@ -94,13 +94,13 @@ mod erc20_balance_component {
         }
 
         fn transfer_from(
-            ref self: ComponentState<TContractState>,
+            self: @ComponentState<TContractState>,
             sender: ContractAddress,
             recipient: ContractAddress,
             amount: u256
         ) -> bool {
             let caller = get_caller_address();
-            let mut erc20_allowance = get_dep_component_mut!(ref self, ERC20Allowance);
+            let erc20_allowance = get_dep_component!(self, ERC20Allowance);
             erc20_allowance.spend_allowance(sender, caller, amount);
             self.transfer_internal(sender, recipient, amount);
             true
@@ -120,7 +120,7 @@ mod erc20_balance_component {
         }
 
         fn transferFrom(
-            ref self: ComponentState<TContractState>,
+            self: @ComponentState<TContractState>,
             sender: ContractAddress,
             recipient: ContractAddress,
             amount: u256
@@ -146,7 +146,7 @@ mod erc20_balance_component {
         }
 
         fn update_balance(
-            ref self: ComponentState<TContractState>,
+            self: @ComponentState<TContractState>,
             account: ContractAddress,
             subtract: u256,
             add: u256
@@ -159,7 +159,7 @@ mod erc20_balance_component {
         }
 
         fn transfer_internal(
-            ref self: ComponentState<TContractState>,
+            self: @ComponentState<TContractState>,
             sender: ContractAddress,
             recipient: ContractAddress,
             amount: u256
@@ -171,7 +171,7 @@ mod erc20_balance_component {
 
             let transfer_event = Transfer { from: sender, to: recipient, value: amount };
 
-            self.emit(transfer_event.clone());
+            // self.emit(transfer_event.clone());
             emit!(self.get_contract().world(), (Event::Transfer(transfer_event)));
         }
     }

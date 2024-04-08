@@ -60,7 +60,7 @@ mod initializable_component {
         TContractState, +HasComponent<TContractState>, +IWorldProvider<TContractState>
     > of InternalTrait<TContractState> {
         /// Ensures the calling function can only be called once.
-        fn initialize(ref self: ComponentState<TContractState>) {
+        fn initialize(self: @ComponentState<TContractState>) {
             assert(!self.is_initialized(), Errors::INITIALIZED);
             set!(
                 self.get_contract().world(),
