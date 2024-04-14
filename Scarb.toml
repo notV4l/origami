@@ -9,7 +9,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.6.0"
+version = "0.6.1-alpha.1"
 description = "Community-maintained libraries for Cairo"
 homepage = "https://github.com/dojoengine/origami"
 authors = ["bal7hazar@proton.me"]
