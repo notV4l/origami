@@ -21,6 +21,10 @@ mod security {
     mod commitment;
 }
 
+mod structures {
+    mod sorted_list;
+}
+
 mod map {
     mod hex {
         mod hex;
